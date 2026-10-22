@@ -1,1 +1,1 @@
-# Numerical_Integration_Methods
+# Scientific Computing Project — Composite Numerical Integration and Error Analysis

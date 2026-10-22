@@ -6,7 +6,7 @@ Use lowercase names with hyphens and include the associated GitHub Issue number.
 
 Examples:
 
-- docs/repository-setup
+- docs/repo-setup
 - feature/trapezoidal-rule
 - feature/simpson-rule
 - feature/error-calculation
@@ -37,6 +37,10 @@ report/: Final project report.
 7. Push the branch and create a Pull Request (PR).
 8. Include 'Closes #<issue-number>' in the PR description.
 9. Obtain a review from another member before merging.
+
+## Python implementation files
+Create files inside 'src/' Initially, function templates are sufficient.
+example: trapezoidal.py (For member 1)
 
 ## Coding Standards
 
