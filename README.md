@@ -9,9 +9,9 @@ Implement composite numerical integration methods and investigate how their accu
 ## Team Roles
 
 - Member 1: Yash Singhal (Team Leader and Trapezoidal rule) 
-- Member 2: Prajit Adhikari
-- Member 3: Puneet 
-- Member 4: Anurag
+- Member 2: Prajit Adhikari (Simpson's rule)
+- Member 3: Puneet (Error and Convergence Analysis)
+- Member 4: Anurag (Experiments and Visualization)
 
 ### Testing
 
