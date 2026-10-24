@@ -2,11 +2,11 @@
 
 ## Branch Naming Convention
 
-Use lowercase names with hyphens and include the associated GitHub Issue number.
+Use lowercase names with feature and include the associated work role.
 
 Examples:
 
-- docs/repository-setup
+- docs/repo-setup
 - feature/trapezoidal-rule
 - feature/simpson-rule
 - feature/error-calculation
@@ -16,15 +16,15 @@ Examples:
 
 ## Folder Structure
 
-src/: Numerical algorithms and analysis functions.
+- src/: Numerical algorithms and analysis functions.
 
-tests/: Tests for numerical accuracy and input validation.
+- tests/: Tests for numerical accuracy and input validation.
 
-examples/: Demonstrations of the implemented methods.
+- examples/: Demonstrations of the implemented methods.
 
-results/: Generated tables and plots.
+- results/: Generated tables and plots.
 
-report/: Final project report.
+- report/: Final project report.
 
 ## Development Workflow
 
@@ -35,8 +35,12 @@ report/: Final project report.
 5. Add tests and run the test suite.
 6. Commit changes with meaningful messages.
 7. Push the branch and create a Pull Request (PR).
-8. Include 'Closes #<issue-number>' in the PR description.
+8. Include 'Closes #(issue-number)' in the PR description.
 9. Obtain a review from another member before merging.
+
+## Python implementation files
+Create files inside 'src/' Initially, function templates are sufficient.
+example: trapezoidal.py (For member 1)
 
 ## Coding Standards
 
