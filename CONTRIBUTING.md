@@ -16,15 +16,15 @@ Examples:
 
 ## Folder Structure
 
-src/: Numerical algorithms and analysis functions.
+- src/: Numerical algorithms and analysis functions.
 
-tests/: Tests for numerical accuracy and input validation.
+- tests/: Tests for numerical accuracy and input validation.
 
-examples/: Demonstrations of the implemented methods.
+- examples/: Demonstrations of the implemented methods.
 
-results/: Generated tables and plots.
+- results/: Generated tables and plots.
 
-report/: Final project report.
+- report/: Final project report.
 
 ## Development Workflow
 
