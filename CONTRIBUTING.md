@@ -2,7 +2,7 @@
 
 ## Branch Naming Convention
 
-Use lowercase names with hyphens and include the associated GitHub Issue number.
+Use lowercase names with feature and include the associated work role.
 
 Examples:
 
@@ -35,7 +35,7 @@ report/: Final project report.
 5. Add tests and run the test suite.
 6. Commit changes with meaningful messages.
 7. Push the branch and create a Pull Request (PR).
-8. Include 'Closes #<issue-number>' in the PR description.
+8. Include 'Closes #(issue-number)' in the PR description.
 9. Obtain a review from another member before merging.
 
 ## Python implementation files
