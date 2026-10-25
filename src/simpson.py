@@ -4,6 +4,8 @@ import numpy as np
 
 def simpson(func, a, b, n):
     """Approximate the integral of func over [a, b] using Simpson's rule."""
+    if not callable(func):
+        raise TypeError("func must be a callable function.")
     if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
         raise TypeError("a and b must be numeric.")
 
