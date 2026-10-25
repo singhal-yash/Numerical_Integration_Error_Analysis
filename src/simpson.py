@@ -1,52 +1,35 @@
-import math
+
 import numpy as np
 
 
-class Simpson:
-    """
-    A class to perform numerical integration using Simpson's rule. 
-    """
-    def __init__(self, func, a, b, n):
-        self.func = func
-        self.a = a  
-        self.b = b
-        self.n = n
+def simpson(func, a, b, n):
+    """Approximate the integral of func over [a, b] using Simpson's rule."""
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        raise TypeError("a and b must be numeric.")
 
-    def integrate(self):
-        if self.n % 2 == 1:
-            raise ValueError("n must be an even integer.")
-        
-        h = (self.b - self.a) / self.n
-        x = np.linspace(self.a, self.b, self.n + 1)
-        y = self.func(x)
+    if not isinstance(n, int) or isinstance(n, bool):
+        raise TypeError("n must be an integer.")
 
-        integral = (h / 3) * (y[0] + 2 * np.sum(y[2:self.n:2]) + 4 * np.sum(y[1:self.n:2]) + y[self.n])
-        return integral
+    if a >= b:
+        raise ValueError("a must be less than b.")
 
-    def __str__(self):
-        return f"Simpson's Rule: a={self.a}, b={self.b}, n={self.n}"
+    if n <= 0 or n % 2 != 0:
+        raise ValueError("n must be a positive even integer.")
 
-    def __repr__(self):
-        return f"Simpson(func={self.func.__name__}, a={self.a}, b={self.b}, n={self.n})"
+    h = (b - a) / n # this is the width of each subinterval
+    x = np.linspace(a, b, n + 1) # generate n+1 equally spaced points between a and b
+    y = np.asarray(func(x)) # evaluate the function at each x value
 
-    def __eq__(self, other):
-        if not isinstance(other, Simpson):
-            return NotImplemented
-        return (self.func.__name__ == other.func.__name__ and
-                self.a == other.a and
-                self.b == other.b and
-                self.n == other.n)
+    integral = (h / 3) * (
+        y[0]
+        + 4 * np.sum(y[1:n:2])
+        + 2 * np.sum(y[2:n:2])
+        + y[n]
+    )
+
+    return integral
 
 
 if __name__ == "__main__":
-    def f(x):
-        return np.sin(x)
-
-    a = 0
-    b = math.pi
-    n = 10 
-
-    simpson = Simpson(f, a, b, n)
-    result = simpson.integrate()
-    print(f"Integral of sin(x) from {a} to {b} is approximately: {result:.5f}.")
-
+    result = simpson(np.sin, 0, np.pi, 10)
+    print(f"Integral ≈ {result:.8f}")
