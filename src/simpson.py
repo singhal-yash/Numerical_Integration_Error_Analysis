@@ -3,9 +3,25 @@ import numpy as np
 
 
 def simpson(func, a, b, n):
-    """Approximate the integral of func over [a, b] using Simpson's rule."""
+    """Approximate the integral of func over [a, b] using Simpson's rule.
+    
+    Parameters:
+    func: callable
+        The function to integrate.
+    a: float
+        The lower limit of integration.
+    b: float
+        The upper limit of integration.
+    n: int
+        The number of subintervals to use (must be a positive even integer).
+
+    Returns:
+    float
+        The approximate integral of func over [a, b].
+    """
     if not callable(func):
         raise TypeError("func must be a callable function.")
+    
     if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
         raise TypeError("a and b must be numeric.")
 
