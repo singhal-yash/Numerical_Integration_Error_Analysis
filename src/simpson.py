@@ -17,6 +17,9 @@ def simpson(func, a, b, n):
 
     if n <= 0 or n % 2 != 0:
         raise ValueError("n must be a positive even integer.")
+    
+    if np.isnan(a) or np.isnan(b):
+        raise ValueError("a and b must be finite numbers.")
 
     h = (b - a) / n # this is the width of each subinterval
     x = np.linspace(a, b, n + 1) # generate n+1 equally spaced points between a and b
