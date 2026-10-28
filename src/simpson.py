@@ -28,9 +28,6 @@ def composite_simpson(func, a, b, n):
     if not isinstance(n, int) or isinstance(n, bool):
         raise TypeError("n must be an integer.")
 
-    if a >= b:
-        raise ValueError("a must be less than b.")
-
     if n <= 0 or n % 2 != 0:
         raise ValueError("n must be a positive even integer.")
     
@@ -55,5 +52,5 @@ def composite_simpson(func, a, b, n):
 
 
 if __name__ == "__main__":
-    result = composite_simpson(np.sin, 0, np.pi, 10)
+    result = composite_simpson(np.sin, 0, 1.5*np.pi,  10)
     print(f"Integral ≈ {result:.8f}")
