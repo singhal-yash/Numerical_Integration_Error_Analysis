@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def simpson(func, a, b, n):
+def composite_simpson(func, a, b, n):
     """Approximate the integral of func over [a, b] using Simpson's rule.
     
     Parameters:
@@ -35,6 +35,9 @@ def simpson(func, a, b, n):
         raise ValueError("n must be a positive even integer.")
     
     if np.isnan(a) or np.isnan(b):
+        raise ValueError("a and b must be finite numbers.")
+
+    if np.isinf(a) or np.isinf(b):
         raise ValueError("a and b must be finite numbers.")
 
     h = (b - a) / n # this is the width of each subinterval
