@@ -55,5 +55,5 @@ def composite_simpson(func, a, b, n):
 
 
 if __name__ == "__main__":
-    result = simpson(np.sin, 0, np.pi, 10)
+    result = composite_simpson(np.sin, 0, np.pi, 10)
     print(f"Integral ≈ {result:.8f}")
