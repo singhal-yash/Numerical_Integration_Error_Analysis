@@ -1,5 +1,5 @@
-
-import numpy as np
+from numbers import Integral, Real
+import math
 
 
 def composite_simpson(func, a, b, n):
@@ -22,10 +22,10 @@ def composite_simpson(func, a, b, n):
     if not callable(func):
         raise TypeError("func must be a callable function.")
     
-    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
-        raise TypeError("a and b must be numeric.")
+    if not isinstance(a, Real) or not isinstance(b, Real):
+        raise TypeError("a and b must be real numbers.")
 
-    if not isinstance(n, int) or isinstance(n, bool):
+    if not isinstance(n, Integral) or isinstance(n, bool):
         raise TypeError("n must be an integer.")
 
     if n <= 0 or n % 2 != 0:
@@ -39,7 +39,7 @@ def composite_simpson(func, a, b, n):
 
     h = (b - a) / n # this is the width of each subinterval
     x = np.linspace(a, b, n + 1) # generate n+1 equally spaced points between a and b
-    y = np.asarray(func(x)) # evaluate the function at each x value
+    y = np.array([func(value) for value in x]) # evaluate the function at each x value
 
     integral = (h / 3) * (
         y[0]
