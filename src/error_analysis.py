@@ -138,3 +138,17 @@ if __name__ == "__main__":
         composite_trapezoidal, math.sin, 0, math.pi, 2.0, [4, 8, 16, 32, 64])
     print("Composite Trapezoidal Rule, sin(x) on [0, pi], exact value 2.0")
     print(format_table(table))
+
+    # Simpson's rule is developed on its own branch, so skip this part
+    # (instead of failing) when simpson.py is not present in src/.
+    try:
+        from simpson import composite_simpson
+    except ImportError:
+        print("\nsimpson.py not found in src/: skipping Simpson's rule demo.")
+    else:
+        # Simpson's rule needs an even n; the same n values are used for a
+        # direct comparison with the trapezoidal table above.
+        table = convergence_study(
+            composite_simpson, math.sin, 0, math.pi, 2.0, [4, 8, 16, 32, 64])
+        print("\nComposite Simpson's 1/3 Rule, sin(x) on [0, pi], exact value 2.0")
+        print(format_table(table))

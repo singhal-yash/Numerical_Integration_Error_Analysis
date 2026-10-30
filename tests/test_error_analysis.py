@@ -348,4 +348,7 @@ def test_format_table_contents():
 # This test checks whether format_table still returns the heading row
 # when we give it an empty list of results.
 def test_format_table_empty():
-    assert len(format_table([]).splitlines()) == 1
+    table = format_table([])
+    print("\nformat_table([]) returns:")
+    print(table)
+    assert len(table.splitlines()) == 1
