@@ -1,5 +1,6 @@
 from numbers import Integral, Real
 import math
+import numpy as np
 
 
 def composite_simpson(func, a, b, n):
