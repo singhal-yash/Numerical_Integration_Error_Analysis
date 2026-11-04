@@ -6,8 +6,15 @@ Both composite rules were tested with n = 2, 4, 8, ..., 1024 subintervals (alway
 ### 1. Smooth functions (e^x on [0,1], sin x on [0,pi])
 The observed order is 2.000 for the Trapezoidal rule and 4.000 for Simpson's rule, as theory predicts (error proportional to h^2 and h^4). For e^x with n = 16 the errors are 5.6e-4 (Trapezoidal) and 1.5e-7 (Simpson), so Simpson is about 3800 times more accurate for the same number of subintervals.
 
-### 2. Polynomial exactness (x^k on [0,1], n = 4)
-The Trapezoidal rule is exact for degree 0 and 1 and has errors from degree 2 onward. Simpson's rule is exact up to degree 3 and has errors from degree 4. The Trapezoidal error depends on f'' and Simpson's on the fourth derivative f'''', which is zero for every polynomial of degree 3 or lower.
+### 2. Polynomial exactness
+We tested the monomials x^k (k = 0 to 5) on [0,1] with n = 4, and two general polynomials, 2x^3 - 3x^2 + x + 5 on [0,2] and x^4 - 2x + 1 on [0,2], with n = 4, 8 and 16. A rule counts as exact when its error is only floating-point rounding (error <= 1e-14 * max(1, |exact value|)). The full tables are in `results/tables.txt` and the error against degree is plotted in `results/polynomial_exactness.png`.
+
+- The Trapezoidal rule is exact for degree 0 and 1 and has errors from degree 2 onward (for example 1.04e-2 for x^2).
+- Simpson's rule is exact up to degree 3 and has errors from degree 4 (5.2e-4 for x^4).
+- The cubic 2x^3 - 3x^2 + x + 5 is integrated exactly by Simpson's rule for every n tested, while the Trapezoidal error shrinks like h^2 (0.25, 0.0625, 0.0156) but never reaches zero.
+- The quartic x^4 - 2x + 1 is not exact for either rule, and the errors shrink like h^2 (Trapezoidal) and h^4 (Simpson).
+
+The Trapezoidal error depends on the second derivative f'' and Simpson's on the fourth derivative f'''', which is zero for every polynomial of degree 3 or lower. Exactness does not depend on n, so it is a property of the rule itself.
 
 ### 3. Challenging integrands
 
