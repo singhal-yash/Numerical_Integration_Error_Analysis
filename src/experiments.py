@@ -93,31 +93,124 @@ def experiment_smooth():
 
 
 # Experiment 2: polynomial exactness
+def polynomial_value(coeffs, x):
+    """Value of c0 + c1*x + c2*x^2 + ... at x (coeffs = [c0, c1, c2, ...])."""
+    total = 0.0
+    for power in range(len(coeffs)):
+        total += coeffs[power] * x ** power
+    return total
+
+
+def polynomial_integral(coeffs, a, b):
+    """Exact integral of the polynomial from a to b, found term by term."""
+    total = 0.0
+    for power in range(len(coeffs)):
+        total += coeffs[power] * (b ** (power + 1) - a ** (power + 1)) / (power + 1)
+    return total
+
+
+def is_exact(error, exact):
+    """True if the error is only floating-point rounding.
+    The limit grows a little with the size of the exact value."""
+    return error <= ERROR_FLOOR * max(1.0, abs(exact))
+
+
 def experiment_polynomials():
     show("=" * 74)
-    show("EXPERIMENT 2: POLYNOMIAL EXACTNESS  (f(x) = x^k on [0, 1], n = 4)")
+    show("EXPERIMENT 2: POLYNOMIAL EXACTNESS")
     show("=" * 74)
-    show("Exact integral of x^k on [0,1] is 1/(k+1).")
-    show(f"'EXACT' means the error is at most {ERROR_FLOOR:g} (rounding only).")
+    show("A rule is EXACT for a polynomial if its error is only rounding noise")
+    show(f"(error <= {ERROR_FLOOR:g} * max(1, |exact value|)).")
     show()
-    show(f"{'degree k':>9} {'Trap error':>14} {'Trap':>7} "
-         f"{'Simp error':>14} {'Simp':>7}")
-    show("-" * 56)
 
-    for k in range(0, 6):
+    # Part A: monomials x^k on [0, 1] with n = 4
+    show("Part A: f(x) = x^k on [0, 1], n = 4   (exact integral = 1/(k+1))")
+    show(f"{'k':>2} {'exact':>12} {'Trap approx':>13} {'Trap error':>11} "
+         f"{'exact?':>7} {'Simp approx':>13} {'Simp error':>11} {'exact?':>7}")
+    show("-" * 74)
+
+    degrees = [0, 1, 2, 3, 4, 5]
+    trap_errors = []
+    simp_errors = []
+    trap_exact_flags = []
+    simp_exact_flags = []
+    for k in degrees:
         f = lambda x, k=k: x ** k
         exact = 1.0 / (k + 1)
-        trap_err = compute_errors(composite_trapezoidal, f, 0.0, 1.0,
-                                  exact, [4])[0]["error"]
-        simp_err = compute_errors(composite_simpson, f, 0.0, 1.0,
-                                  exact, [4])[0]["error"]
-        trap_word = "EXACT" if trap_err <= ERROR_FLOOR else "no"
-        simp_word = "EXACT" if simp_err <= ERROR_FLOOR else "no"
-        show(f"{k:>9} {trap_err:>14.3e} {trap_word:>7} "
-             f"{simp_err:>14.3e} {simp_word:>7}")
+        trap_row = compute_errors(composite_trapezoidal, f, 0.0, 1.0, exact, [4])[0]
+        simp_row = compute_errors(composite_simpson, f, 0.0, 1.0, exact, [4])[0]
+        trap_ok = is_exact(trap_row["error"], exact)
+        simp_ok = is_exact(simp_row["error"], exact)
+        trap_errors.append(trap_row["error"])
+        simp_errors.append(simp_row["error"])
+        trap_exact_flags.append(trap_ok)
+        simp_exact_flags.append(simp_ok)
+        show(f"{k:>2} {exact:>12.8f} {trap_row['approx']:>13.8f} "
+             f"{trap_row['error']:>11.3e} {'EXACT' if trap_ok else 'no':>7} "
+             f"{simp_row['approx']:>13.8f} {simp_row['error']:>11.3e} "
+             f"{'EXACT' if simp_ok else 'no':>7}")
     show()
-    show("Expected: Trapezoidal exact for degree <= 1, Simpson for degree <= 3.")
+
+    # Highest degree up to which the rule is exact for every lower degree too
+    trap_best = -1
+    while trap_best + 1 < len(degrees) and trap_exact_flags[trap_best + 1]:
+        trap_best += 1
+    simp_best = -1
+    while simp_best + 1 < len(degrees) and simp_exact_flags[simp_best + 1]:
+        simp_best += 1
+    show(f"Result: Trapezoidal is exact up to degree {trap_best}.")
+    show(f"        Simpson is exact up to degree {simp_best}.")
+    show("Expected: Trapezoidal up to degree 1, Simpson up to degree 3.")
     show()
+
+    # Part B: general polynomials (not just x^k), on other intervals, several n
+    show("Part B: general polynomials, several values of n")
+    show("(exactness does not depend on n, as long as n is even)")
+    show()
+    show(f"{'polynomial':<24} {'n':>3} {'exact':>10} {'Trap error':>11} "
+         f"{'exact?':>7} {'Simp error':>11} {'exact?':>7}")
+    show("-" * 74)
+    polynomials = [
+        ("2x^3-3x^2+x+5 on [0,2]", [5, 1, -3, 2], 0.0, 2.0),
+        ("x^4-2x+1 on [0,2]", [1, -2, 0, 0, 1], 0.0, 2.0),
+    ]
+    for name, coeffs, a, b in polynomials:
+        f = lambda x, coeffs=coeffs: polynomial_value(coeffs, x)
+        exact = polynomial_integral(coeffs, a, b)
+        for n in [4, 8, 16]:
+            trap_err = compute_errors(composite_trapezoidal, f, a, b,
+                                      exact, [n])[0]["error"]
+            simp_err = compute_errors(composite_simpson, f, a, b,
+                                      exact, [n])[0]["error"]
+            show(f"{name:<24} {n:>3} {exact:>10.6f} {trap_err:>11.3e} "
+                 f"{'EXACT' if is_exact(trap_err, exact) else 'no':>7} "
+                 f"{simp_err:>11.3e} "
+                 f"{'EXACT' if is_exact(simp_err, exact) else 'no':>7}")
+    show()
+
+    make_polynomial_plot(degrees, trap_errors, simp_errors)
+
+
+def make_polynomial_plot(degrees, trap_errors, simp_errors):
+    """Error against polynomial degree: the jump shows where exactness ends."""
+    # log axes cannot show 0, so use a tiny value instead of an error of 0
+    trap_plot = [max(e, 1e-17) for e in trap_errors]
+    simp_plot = [max(e, 1e-17) for e in simp_errors]
+
+    plt.figure(figsize=(7, 5))
+    plt.semilogy(degrees, trap_plot, "o-", label="Trapezoidal")
+    plt.semilogy(degrees, simp_plot, "s-", label="Simpson")
+    plt.axhline(ERROR_FLOOR, color="gray", linestyle="--",
+                label="rounding level (1e-14)")
+    plt.xlabel("polynomial degree k  (f(x) = x^k on [0, 1], n = 4)")
+    plt.ylabel("absolute error (0 is drawn as 1e-17)")
+    plt.title("Polynomial exactness")
+    plt.xticks(degrees)
+    plt.grid(True, which="both", alpha=0.3)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(RESULTS_DIR / "polynomial_exactness.png", dpi=150)
+    plt.close()
 
 
 # Experiment 4: challenging integrands

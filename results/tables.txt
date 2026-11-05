@@ -56,21 +56,36 @@ Composite Simpson's rule
     1024     0.003068       2.000000000001    9.841e-13   4.0004
 
 ==========================================================================
-EXPERIMENT 2: POLYNOMIAL EXACTNESS  (f(x) = x^k on [0, 1], n = 4)
+EXPERIMENT 2: POLYNOMIAL EXACTNESS
 ==========================================================================
-Exact integral of x^k on [0,1] is 1/(k+1).
-'EXACT' means the error is at most 1e-14 (rounding only).
+A rule is EXACT for a polynomial if its error is only rounding noise
+(error <= 1e-14 * max(1, |exact value|)).
 
- degree k     Trap error    Trap     Simp error    Simp
---------------------------------------------------------
-        0      0.000e+00   EXACT      0.000e+00   EXACT
-        1      0.000e+00   EXACT      0.000e+00   EXACT
-        2      1.042e-02      no      0.000e+00   EXACT
-        3      1.562e-02      no      0.000e+00   EXACT
-        4      2.070e-02      no      5.208e-04      no
-        5      2.572e-02      no      1.302e-03      no
+Part A: f(x) = x^k on [0, 1], n = 4   (exact integral = 1/(k+1))
+ k        exact   Trap approx  Trap error  exact?   Simp approx  Simp error  exact?
+--------------------------------------------------------------------------
+ 0   1.00000000    1.00000000   0.000e+00   EXACT    1.00000000   0.000e+00   EXACT
+ 1   0.50000000    0.50000000   0.000e+00   EXACT    0.50000000   0.000e+00   EXACT
+ 2   0.33333333    0.34375000   1.042e-02      no    0.33333333   0.000e+00   EXACT
+ 3   0.25000000    0.26562500   1.562e-02      no    0.25000000   0.000e+00   EXACT
+ 4   0.20000000    0.22070312   2.070e-02      no    0.20052083   5.208e-04      no
+ 5   0.16666667    0.19238281   2.572e-02      no    0.16796875   1.302e-03      no
 
-Expected: Trapezoidal exact for degree <= 1, Simpson for degree <= 3.
+Result: Trapezoidal is exact up to degree 1.
+        Simpson is exact up to degree 3.
+Expected: Trapezoidal up to degree 1, Simpson up to degree 3.
+
+Part B: general polynomials, several values of n
+(exactness does not depend on n, as long as n is even)
+
+polynomial                 n      exact  Trap error  exact?  Simp error  exact?
+--------------------------------------------------------------------------
+2x^3-3x^2+x+5 on [0,2]     4  12.000000   2.500e-01      no   0.000e+00   EXACT
+2x^3-3x^2+x+5 on [0,2]     8  12.000000   6.250e-02      no   0.000e+00   EXACT
+2x^3-3x^2+x+5 on [0,2]    16  12.000000   1.562e-02      no   0.000e+00   EXACT
+x^4-2x+1 on [0,2]          4   4.400000   6.625e-01      no   1.667e-02      no
+x^4-2x+1 on [0,2]          8   4.400000   1.664e-01      no   1.042e-03      no
+x^4-2x+1 on [0,2]         16   4.400000   4.165e-02      no   6.510e-05      no
 
 ==========================================================================
 EXPERIMENT 4: MORE CHALLENGING INTEGRANDS
